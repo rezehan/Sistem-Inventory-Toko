@@ -4,6 +4,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import { Package } from 'lucide-react';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
@@ -19,7 +20,12 @@ export default function AuthenticatedLayout({ header, children }) {
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
                                 <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
+                                    <div className="flex items-center space-x-3">
+                                        <div className="bg-blue-600 p-2 rounded-lg">
+                                            <Package className="w-8 h-8 text-white" />
+                                        </div>
+                                        <h1 className="text-2xl font-bold text-gray-900">StockPulse</h1>
+                                    </div>
                                 </Link>
                             </div>
 
