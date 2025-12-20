@@ -17,7 +17,7 @@ class ProductController extends Controller
 
     public function create()
     {
-        return Intertia::render('CreateProduct');
+        return Inertia::render('CreateProduct');
     }
 
     public function store(Request $request)

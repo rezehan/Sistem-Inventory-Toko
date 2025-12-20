@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('sku')->unique(); // Barcode
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->integer('stock')->default(0);
-            $table->decimal('price', 12, 2);
+            $table->string('invoice_code')->unique();
+            $table->decimal('total_price', 15, 2);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
