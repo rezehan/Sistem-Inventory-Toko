@@ -116,9 +116,10 @@ export default function Index({ auth, products = [] }) {
                         className="p-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition">
                             Tambah Produk
                         </Link>
-                        <button className="p-4 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition">
+                        <Link
+                        className="p-4 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition">
                             Transaksi Penjualan
-                        </button>
+                        </Link>
                         <button className="p-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition">
                             Laporan
                         </button>

@@ -11,7 +11,6 @@ export default function CreateProduct({ auth, flash }) {
     description: '',
     stock: '',
     price: '',
-    image: null
   });
 
   const handleChange = (e) => {
@@ -19,28 +18,13 @@ export default function CreateProduct({ auth, flash }) {
     setData(name, value);
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setData('image', file);
-      
-      // Preview image
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     
     // Kirim data ke Laravel Controller
-    post(route('transactions.store'), {
+    post(route('products.store'), {
       forceFormData: true,
       onSuccess: () => {
-        // Reset form setelah berhasil
         reset();
         setImagePreview(null);
       },
@@ -247,54 +231,6 @@ export default function CreateProduct({ auth, flash }) {
                         </p>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Gambar Produk */}
-            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Gambar Produk</h2>
-              
-              <div className="flex items-start space-x-4">
-                <div className="flex-1">
-                  <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <Upload className="w-10 h-10 text-gray-400 mb-3" />
-                      <p className="mb-2 text-sm text-gray-600">
-                        <span className="font-semibold">Klik untuk upload</span> atau drag & drop
-                      </p>
-                      <p className="text-xs text-gray-500">PNG, JPG, JPEG hingga 2MB</p>
-                    </div>
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept="image/png,image/jpeg,image/jpg"
-                      onChange={handleImageChange}
-                    />
-                  </label>
-                  {errors.image && (
-                    <p className="mt-2 text-sm text-red-500">{errors.image}</p>
-                  )}
-                </div>
-                
-                {imagePreview && (
-                  <div className="relative">
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="w-40 h-40 object-cover rounded-lg border-2 border-gray-300 shadow-sm"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setImagePreview(null);
-                        setData('image', null);
-                      }}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-md"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
                   </div>
                 )}
               </div>
