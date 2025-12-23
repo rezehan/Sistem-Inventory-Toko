@@ -185,7 +185,6 @@ const StockPulseDashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-500 text-sm">Total Produk (Stok)</p>
-              <p>helloo world</p>
               <p className="text-2xl font-bold text-gray-800">{statsData.staff.totalProducts}</p>
             </div>
             <Package className="text-blue-500" size={40} />

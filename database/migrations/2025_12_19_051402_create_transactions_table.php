@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('invoice_code')->unique();
             $table->decimal('total_price', 15, 2);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->enum('type', ['sale', 'purchase', 'adjustment'])->default('sale'); // Tambah
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

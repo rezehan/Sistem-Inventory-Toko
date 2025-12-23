@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -33,6 +34,9 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function isAdmin() { return $this->role === 'admin'; }
+    public function isStaff() { return $this->role === 'staff'; }
+    public function isKasir() { return $this->role === 'kasir'; }
     /**
      * Get the attributes that should be cast.
      *
