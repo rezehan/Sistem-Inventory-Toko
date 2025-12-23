@@ -3,7 +3,6 @@ import { Head, useForm, router } from '@inertiajs/react';
 import { Package, Save, X, Upload, ArrowLeft, AlertCircle } from 'lucide-react';
 
 export default function CreateProduct({ auth, flash }) {
-  const [imagePreview, setImagePreview] = useState(null);
 
   const { data, setData, post, processing, errors, reset } = useForm({
     sku: '',
@@ -26,7 +25,6 @@ export default function CreateProduct({ auth, flash }) {
       forceFormData: true,
       onSuccess: () => {
         reset();
-        setImagePreview(null);
       },
       onError: (errors) => {
         console.error('Validation errors:', errors);
@@ -36,7 +34,6 @@ export default function CreateProduct({ auth, flash }) {
 
   const handleReset = () => {
     reset();
-    setImagePreview(null);
   };
 
   const handleBack = () => {

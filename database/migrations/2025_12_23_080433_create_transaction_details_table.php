@@ -16,6 +16,7 @@ return new class extends Migration
             $table->decimal('price', 12, 2);
             $table->decimal('subtotal', 15, 2);
             $table->timestamps();
+            $table->unique(['transaction_id', 'product_id']);
         });
     }
 

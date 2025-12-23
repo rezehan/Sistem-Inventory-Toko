@@ -3,7 +3,7 @@ import { Head, Link } from '@inertiajs/react';
 import { Package, ShoppingCart, AlertTriangle, TrendingUp, ArrowRight } from 'lucide-react';
 
 export default function Dashboard({ auth, products = [] }) {
-    
+
     const totalProduk = products.length;
     const stokMenipis = products.filter(p => p.stock <= 10).length;
 
@@ -26,13 +26,13 @@ export default function Dashboard({ auth, products = [] }) {
             <Head title="Dashboard" />
 
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-12">
-                
+
                 {/* Statistik */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     <StatCard icon={Package} title="Total Produk" value={totalProduk} color="bg-blue-500" />
                     <StatCard icon={ShoppingCart} title="Transaksi Hari Ini" value="47" color="bg-green-500" />
                     <StatCard icon={AlertTriangle} title="Stok Menipis" value={stokMenipis} color="bg-red-500" />
-                    <StatCard icon={TrendingUp} title="Penjualan Bulan Ini" value="Rp 7.2M" color="bg-purple-500" />
+                    {/* <StatCard icon={TrendingUp} title="Penjualan Bulan Ini" value="Rp 7.2M" color="bg-purple-500" /> */}
                 </div>
 
                 {/* Tabel Semua Produk (READ ONLY) */}
@@ -41,15 +41,7 @@ export default function Dashboard({ auth, products = [] }) {
                         <h2 className="text-lg font-semibold text-gray-800">
                             Semua Data Inventory ({totalProduk} Items)
                         </h2>
-                        
-                        <Link 
-                            href={route('products.index')}
-                            className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
-                        >
-                            Kelola Produk <ArrowRight size={16} />
-                        </Link>
                     </div>
-
                     {/* FITUR SCROLL: 
                         max-h-[500px] = Tinggi maksimal tabel sekitar 500px
                         overflow-y-auto = Munculkan scrollbar jika data melebihi tinggi
@@ -61,6 +53,7 @@ export default function Dashboard({ auth, products = [] }) {
                                 <tr>
                                     <th className="px-6 py-4 bg-gray-50">SKU</th>
                                     <th className="px-6 py-4 bg-gray-50">Nama Produk</th>
+                                    {/* <th className="px-6 py-4 bg-gray-50">Tanggal Masuk</th> */}
                                     <th className="px-6 py-4 bg-gray-50">Harga</th>
                                     <th className="px-6 py-4 bg-gray-50">Stok</th>
                                     <th className="px-6 py-4 bg-gray-50">Status</th>
@@ -71,6 +64,11 @@ export default function Dashboard({ auth, products = [] }) {
                                     <tr key={product.id} className="hover:bg-gray-50">
                                         <td className="px-6 py-4 font-medium text-gray-600">{product.sku}</td>
                                         <td className="px-6 py-4 font-semibold text-gray-800">{product.name}</td>
+                                        {/* <td className="px-6 py-4 font-semibold text-gray-800">{new Date(product.created_at).toLocaleDateString(('id-ID'), {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric'
+                                        })}</td> */}
                                         <td className="px-6 py-4">Rp {parseInt(product.price).toLocaleString()}</td>
                                         <td className="px-6 py-4">{product.stock}</td>
                                         <td className="px-6 py-4">
@@ -93,21 +91,16 @@ export default function Dashboard({ auth, products = [] }) {
                 {/* Menu Cepat */}
                 <div className="bg-white rounded-lg shadow p-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-4">Menu Cepat</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <Link 
-                            href={route('products.index')} 
-                            className="p-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition text-left block"
+                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+                        <Link
+                            href={route('products.index')}
+                            className="p-4 text-center bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition block"
                         >
-                            Kelola Produk (Full)
+                            Kelola Produk
                         </Link>
-                        
-                        <button className="p-4 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition text-left">
-                            Input Transaksi
-                        </button>
-                        
-                        <button className="p-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition text-left">
+                        <Link href={route('report')} className="p-4 text-center bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition">
                             Lihat Laporan
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>

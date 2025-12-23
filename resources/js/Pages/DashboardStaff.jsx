@@ -32,8 +32,9 @@ export default function Index({ auth, products = [] }) {
         <AuthenticatedLayout
             user={auth.user}
         >
+            <Head title="Daftar Produk" /> {/* Tambahkan Head title */}
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     <StatCard
                         icon={Package}
                         title="Total Produk"
@@ -51,12 +52,6 @@ export default function Index({ auth, products = [] }) {
                         title="Stok Menipis"
                         value={stokMenipis}
                         color="bg-red-500"
-                    />
-                    <StatCard
-                        icon={TrendingUp}
-                        title="Penjualan Bulan Ini"
-                        value="Rp 7.2M"
-                        color="bg-purple-500"
                     />
                 </div>
                 <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
@@ -90,13 +85,13 @@ export default function Index({ auth, products = [] }) {
                                             >
                                                 Hapus
                                             </button>
-                                            <button
-                                                onClick={() => handleEdit(product.id)}
-                                                className="text-yellow-500 hover:text-red-700 ml-4"
+                                            <Link
+                                                href={route('products.edit', product.id)}
+                                                className="flex flex-col items-center justify-center text-yellow-500 hover:text-red-700 ml-4"
                                             >
                                                 <Pencil />
                                                 edit
-                                            </button>
+                                            </Link>
                                         </td>
                                     </tr>
                                 ))}
@@ -110,19 +105,16 @@ export default function Index({ auth, products = [] }) {
                 {/* Quick Actions */}
                 <div className="bg-white rounded-lg shadow p-6 mt-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-4">Menu Cepat</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
                         <Link 
                         href={route('products.create')}
-                        className="p-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition">
+                        className="p-4 text-center bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition">
                             Tambah Produk
                         </Link>
                         <Link
-                        className="p-4 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition">
+                        className="p-4 text-center bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition">
                             Transaksi Penjualan
                         </Link>
-                        <button className="p-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition">
-                            Laporan
-                        </button>
                     </div>
                 </div>
             </div>
