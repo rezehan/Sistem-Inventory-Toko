@@ -40,7 +40,7 @@ export default function CreateProduct({ auth, flash }) {
   };
 
   const handleBack = () => {
-    router.visit(route('transactions.index'));
+    router.visit(route('products.index'));
   };
 
   const formatRupiah = (value) => {

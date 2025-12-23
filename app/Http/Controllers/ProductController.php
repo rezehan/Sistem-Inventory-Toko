@@ -30,7 +30,6 @@ class ProductController extends Controller
         ]);
 
         Product::create($request->all());
-
         return redirect()->route('products.index')->with('message', 'Produk berhasil ditambahkan!');
     }
 
@@ -39,4 +38,19 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->back();
     }
+    public function bulkDestroy(Request $request)
+{
+    // Validasi agar data yang dikirim berupa array
+    $request->validate([
+        'ids' => 'required|array',
+        'ids.*' => 'exists:products,id'
+    ]);
+
+    // Hapus semua produk yang ID-nya ada dalam daftar
+    Product::whereIn('id', $request->ids)->delete();
+
+    return redirect()->back()->with('message', 'Produk terpilih berhasil dihapus!');
+}// app/Http/Controllers/ProductController.php
+
+
 }
