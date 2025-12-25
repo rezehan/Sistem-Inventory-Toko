@@ -11,10 +11,12 @@ class Transaction extends Model
 
     protected $fillable = [
         'invoice_code',
-        'total_price',
+        'total_price',   // <-- Pastikan ini total_price (bukan total_amount)
         'user_id',
-        'type', // Tambah: 'sale', 'purchase', 'adjustment'
-        'notes', // Opsional: catatan
+        'customer_name', // <-- Ini sekarang aman karena sudah dimigrasi
+        'payment_type',  // <-- Ini sekarang aman karena sudah dimigrasi
+        'notes',
+        'type',
     ];
 
     // Relasi ke User (pembuat transaksi)
