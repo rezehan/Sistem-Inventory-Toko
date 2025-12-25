@@ -58,7 +58,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             // Ambil detail transaksi beserta data Induk (Invoice) dan Produknya
             'salesData' => TransactionDetail::with(['transaction', 'product'])
                 ->latest() // Urutkan dari yang terbaru
-                ->get()
+                ->get(),
+                'products' => Product::latest()->get()
         ]);
     })->name('report');
 });

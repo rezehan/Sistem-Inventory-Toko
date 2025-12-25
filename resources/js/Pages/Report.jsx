@@ -3,11 +3,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import {
     BarChart3, Package, ShoppingCart, Calendar, Search, Filter,
-    FileText, ArrowUp, ArrowDown, DollarSign
+    FileText, Users, DollarSign, Activity,
+    Link
 } from 'lucide-react';
 
-export default function Report({ auth, salesData = [] }) {
+export default function Report({ auth, salesData = [], products }) {
     // --- STATE ---
+    console.log(products)
     const [searchTerm, setSearchTerm] = useState('');
     const [dateFilter, setDateFilter] = useState('all'); // all, today, week, month
     const [sortBy, setSortBy] = useState('newest'); // newest, oldest, highest, lowest
@@ -50,7 +52,7 @@ export default function Report({ auth, salesData = [] }) {
         if (dateFilter === 'today') {
             filtered = filtered.filter(item => {
                 const itemDate = new Date(item.created_at);
-                itemDate.setHours(0,0,0,0);
+                itemDate.setHours(0, 0, 0, 0);
                 return itemDate.getTime() === now.getTime();
             });
         } else if (dateFilter === 'week') {
@@ -69,10 +71,10 @@ export default function Report({ auth, salesData = [] }) {
     // --- LOGIC 2: GROUPING & SORTING ---
     const groupedTransactions = useMemo(() => {
         const grouped = {};
-        
+
         filteredData.forEach(item => {
             const trxId = item.transaction_id;
-            
+
             // Grouping by Transaction ID
             if (!grouped[trxId]) {
                 grouped[trxId] = {
@@ -86,7 +88,7 @@ export default function Report({ auth, salesData = [] }) {
                     total_transaction: 0
                 };
             }
-            
+
             grouped[trxId].items.push(item);
             grouped[trxId].total_transaction += parseFloat(item.subtotal || 0);
         });
@@ -120,7 +122,7 @@ export default function Report({ auth, salesData = [] }) {
 
             <div className="min-h-screen bg-gray-100 p-6">
                 <div className="max-w-7xl mx-auto">
-                    
+
                     {/* HEADER */}
                     <div className="mb-8">
                         <h1 className="text-3xl font-bold text-gray-800">Laporan Penjualan</h1>
@@ -178,7 +180,7 @@ export default function Report({ auth, salesData = [] }) {
                     {/* TOOLBAR FILTER */}
                     <div className="bg-white p-4 rounded-lg shadow mb-6 flex flex-col md:flex-row gap-4 items-center">
                         <div className="relative w-full md:w-1/3">
-                            <Search className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" />
+                            <Search className="absolute left-3 top-2.5 text-gray-400 w-5 h-5 hover:text-blue-500" />
                             <input
                                 type="text"
                                 placeholder="Cari Invoice / Pelanggan..."
@@ -203,7 +205,7 @@ export default function Report({ auth, salesData = [] }) {
                         </div>
 
                         <div className="flex items-center gap-2 w-full md:w-auto ml-auto">
-                            <Filter className="text-gray-400 w-5 h-5" />
+                            <Filter className="text-gray-400 w-5 h-5 hover:text-green-500" />
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value)}
@@ -218,7 +220,9 @@ export default function Report({ auth, salesData = [] }) {
                     </div>
 
                     {/* LIST TRANSAKSI */}
-                    <div className="space-y-4">
+                    <div className="grid gap-5 lg:grid-cols-2">
+                        {/* list transaksi */}
+                        <div className="space-y-4">
                         {groupedTransactions.length > 0 ? (
                             groupedTransactions.map((trx) => (
                                 <div key={trx.id} className="bg-white rounded-lg shadow hover:shadow-md transition duration-200 overflow-hidden border border-gray-200">
@@ -271,13 +275,12 @@ export default function Report({ auth, salesData = [] }) {
                                                                 <div className="flex items-center gap-2 mt-1">
                                                                     <span className="text-xs text-gray-400">SKU: {item.product?.sku}</span>
                                                                     {item.product && (
-                                                                         <span className={`text-[10px] px-1.5 py-0.5 rounded border ${
-                                                                            item.product.stock <= 5 
-                                                                            ? 'bg-red-50 text-red-600 border-red-200' 
+                                                                        <span className={`text-[10px] px-1.5 py-0.5 rounded border ${item.product.stock <= 5
+                                                                            ? 'bg-red-50 text-red-600 border-red-200'
                                                                             : 'bg-blue-50 text-blue-600 border-blue-200'
-                                                                         }`}>
+                                                                            }`}>
                                                                             Sisa Stok: {item.product.stock}
-                                                                         </span>
+                                                                        </span>
                                                                     )}
                                                                 </div>
                                                             </td>
@@ -305,14 +308,92 @@ export default function Report({ auth, salesData = [] }) {
                                 <p className="text-gray-500 mt-1">
                                     Coba ubah kata kunci pencarian atau filter tanggal Anda.
                                 </p>
-                                <button 
-                                    onClick={() => {setSearchTerm(''); setDateFilter('all');}}
+                                <button
+                                    onClick={() => { setSearchTerm(''); setDateFilter('all'); }}
                                     className="mt-4 text-blue-600 hover:text-blue-800 font-medium hover:underline"
                                 >
                                     Reset Filter
                                 </button>
                             </div>
                         )}
+                        </div>
+                    {/* tabel produk */}
+                              <div className="space-y-3">
+            {products.map((product) => (
+              <div key={product.id} className="p-3 bg-red-50 rounded-lg border border-red-200">
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <p className="font-medium text-gray-800">{product.sku}</p>
+                    <p className="text-xs text-gray-500">{product.name}</p>
+                  </div>
+                  <span className="text-xs bg-red-200 text-red-800 px-2 py-1 rounded">Urgent</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 bg-white rounded-full h-2">
+                    <div 
+                      className="bg-red-500 h-2 rounded-full" 
+                      style={{width: `${(product.stock / product.min) * 100}%`}}
+                    ></div>
+                  </div>
+                  <span className="text-sm font-semibold text-red-600">{product.stock}/{product.min}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+                    </div>
+                    {/* Additional Stats */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                        {auth.user.role === 'admin' ? <>
+                            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow p-6 text-white">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-purple-100 text-sm">Total Staff</p>
+                                        <p className="text-3xl font-bold">8</p>
+                                    </div>
+                                    <Users size={40} className="opacity-80" />
+                                </div>
+                            </div>
+
+                            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow p-6 text-white">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-orange-100 text-sm">Pending Orders</p>
+                                        <p className="text-3xl font-bold">98</p>
+                                    </div>
+                                    <Activity size={40} className="opacity-80" />
+                                </div>
+                            </div>
+
+                            <div className="bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg shadow p-6 text-white">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-teal-100 text-sm">Kategori Produk</p>
+                                        <p className="text-3xl font-bold">24</p>
+                                    </div>
+                                    <BarChart3 size={40} className="opacity-80" />
+                                </div>
+                            </div>
+                        </> :
+                            <>
+
+                                {/* Quick Actions - Only Stock and Transaction */}
+                                <div className="bg-white rounded-lg shadow p-6 w-full">
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Aksi Cepat</h3>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <button className="p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition text-center">
+                                            <Package className="mx-auto mb-2 text-blue-600" size={32} />
+                                            <p className="text-base font-medium text-gray-700">Kelola Stok</p>
+                                            <p className="text-xs text-gray-500 mt-1">Update & Monitoring Stok</p>
+                                        </button>
+                                        <Link href={route('transactions.index')} className="p-6 bg-green-50 rounded-lg hover:bg-green-100 transition text-center">
+                                            <ShoppingCart className="mx-auto mb-2 text-green-600" size={32} />
+                                            <p className="text-base font-medium text-gray-700">Transaksi Penjualan</p>
+                                            <p className="text-xs text-gray-500 mt-1">Buat Transaksi Baru</p>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </>
+                        }
                     </div>
 
                 </div>
