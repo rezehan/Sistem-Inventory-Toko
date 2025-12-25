@@ -98,6 +98,13 @@ export default function Dashboard({ auth, products = [] }) {
                         >
                             Kelola Produk
                         </Link>
+                        {/* 2. Tombol Transaksi (Ungu) - SEKARANG SUDAH AKTIF */}
+                        <Link 
+                            href={route('transactions.index')}
+                            className="p-4 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition text-left block"
+                        >
+                            Transaksi Penjualan
+                        </Link>
                         <Link href={route('report')} className="p-4 text-center bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition">
                             Lihat Laporan
                         </Link>

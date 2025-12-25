@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionController;
 use App\Models\Product;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +35,8 @@ Route::get('/halaman-blog', function () {
 */
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
 
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard', [
