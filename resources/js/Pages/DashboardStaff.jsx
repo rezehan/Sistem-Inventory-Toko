@@ -106,10 +106,16 @@ export default function Index({ auth, products = [] }) {
                 <div className="bg-white rounded-lg shadow p-6 mt-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-4">Menu Cepat</h2>
                     <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
-                        <Link 
-                        href={route('products.create')}
-                        className="p-4 text-center bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition">
+                        <Link
+                            href={route('products.create')}
+                            className="p-4 text-center bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition">
                             Tambah Produk
+                        </Link>
+                        <Link
+                            href={route('transactions.index')}
+                            className="p-4 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition text-left block"
+                        >
+                            Transaksi Penjualan
                         </Link>
 
                     </div>
