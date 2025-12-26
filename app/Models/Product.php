@@ -26,8 +26,8 @@ class Product extends Model
      * Relasi ke Transaksi
      * Satu produk bisa memiliki banyak riwayat transaksi (masuk/keluar)
      */
-    public function transactions()
+    public function transactionsDetails()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(TransactionDetail::class);
     }
 }

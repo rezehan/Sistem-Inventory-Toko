@@ -55,9 +55,9 @@ export default function Welcome({ auth }) {
                             dan laporan toko Anda secara real-time
                         </p>
                         <div className="flex justify-center gap-4">
-                            <button className="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-lg font-semibold shadow-lg">
+                            <Link href={route('dashboard')} className="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-lg font-semibold shadow-lg">
                                 Mulai Sekarang
-                            </button>
+                            </Link>
                             <Link href={route('blogSite')} className="px-8 py-4 bg-white text-blue-600 border-2 border-blue-600 rounded-lg hover:bg-blue-50 transition text-lg font-semibold">
                                 Pelajari Lebih Lanjut
                             </Link>

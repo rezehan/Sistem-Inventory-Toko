@@ -1,95 +1,261 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm } from '@inertiajs/react';
+import React, { useState } from 'react';
+import { Head, useForm, router } from '@inertiajs/react';
+import { Package, Save, X, Upload, ArrowLeft, AlertCircle } from 'lucide-react';
 
-export default function Create({ auth }) {
-    const { data, setData, post, processing, errors } = useForm({
-        sku: '',
-        name: '',
-        description: '',
-        price: '',
-        stock: '',
+export default function CreateProduct({ auth, flash }) {
+
+  const { data, setData, post, processing, errors, reset } = useForm({
+    sku: '',
+    name: '',
+    description: '',
+    stock: '',
+    price: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData(name, value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    // Kirim data ke Laravel Controller
+    post(route('products.store'), {
+      forceFormData: true,
+      onSuccess: () => {
+        reset();
+      },
+      onError: (errors) => {
+        console.error('Validation errors:', errors);
+      }
     });
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        post(route('products.store'));
-    };
+  const handleReset = () => {
+    reset();
+  };
 
-    return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Tambah Produk Baru</h2>}
-        >
-            <Head title="Tambah Produk" />
+  const handleBack = () => {
+    router.visit(route('products.index'));
+  };
 
-            <div className="py-12">
-                <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+  const formatRupiah = (value) => {
+    if (!value) return 'Rp 0';
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0
+    }).format(value);
+  };
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            {/* SKU */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">SKU / Kode Barang</label>
-                                <input
-                                    type="text"
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    value={data.sku}
-                                    onChange={e => setData('sku', e.target.value)}
-                                />
-                                {errors.sku && <div className="text-red-500 text-sm mt-1">{errors.sku}</div>}
-                            </div>
-
-                            {/* Nama Produk */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Nama Produk</label>
-                                <input
-                                    type="text"
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    value={data.name}
-                                    onChange={e => setData('name', e.target.value)}
-                                />
-                                {errors.name && <div className="text-red-500 text-sm mt-1">{errors.name}</div>}
-                            </div>
-
-                            {/* Stok & Harga (Grid 2 Kolom) */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">Stok Awal</label>
-                                    <input
-                                        type="number"
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                        value={data.stock}
-                                        onChange={e => setData('stock', e.target.value)}
-                                    />
-                                    {errors.stock && <div className="text-red-500 text-sm mt-1">{errors.stock}</div>}
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">Harga Jual (Rp)</label>
-                                    <input
-                                        type="number"
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                        value={data.price}
-                                        onChange={e => setData('price', e.target.value)}
-                                    />
-                                    {errors.price && <div className="text-red-500 text-sm mt-1">{errors.price}</div>}
-                                </div>
-                            </div>
-
-                            {/* Tombol Simpan */}
-                            <div className="flex justify-end pt-4">
-                                <button
-                                    type="submit"
-                                    disabled={processing}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg transition"
-                                >
-                                    Simpan Produk
-                                </button>
-                            </div>
-                        </form>
-
-                    </div>
-                </div>
+  return (
+    <>
+      <Head title="Tambah Produk - StockPulse" />
+      
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Flash Messages */}
+          {flash?.success && (
+            <div className="mb-4 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
+              <AlertCircle className="w-5 h-5 mr-2" />
+              {flash.success}
             </div>
-        </AuthenticatedLayout>
-    );
+          )}
+
+          {flash?.error && (
+            <div className="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
+              <AlertCircle className="w-5 h-5 mr-2" />
+              {flash.error}
+            </div>
+          )}
+
+          {/* Header */}
+          <div className="mb-6">
+            <button 
+              onClick={handleBack}
+              type="button"
+              className="flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              Kembali ke Daftar Produk
+            </button>
+            <div className="flex items-center">
+              <Package className="w-8 h-8 text-blue-600 mr-3" />
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">Tambah Produk Baru</h1>
+                <p className="text-gray-600">Lengkapi form di bawah untuk menambah produk ke inventory</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            {/* Informasi Produk */}
+            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Informasi Produk</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* SKU */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    SKU (Kode Produk) <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="sku"
+                    value={data.sku}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                      errors.sku ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="Contoh: PRD-001"
+                  />
+                  {errors.sku && (
+                    <p className="mt-1 text-sm text-red-500">{errors.sku}</p>
+                  )}
+                  <p className="mt-1 text-xs text-gray-500">Kode unik untuk produk ini</p>
+                </div>
+
+                {/* Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Nama Produk <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={data.name}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                      errors.name ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="Contoh: Laptop ASUS ROG"
+                  />
+                  {errors.name && (
+                    <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                  )}
+                </div>
+
+                {/* Description */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Deskripsi Produk
+                  </label>
+                  <textarea
+                    name="description"
+                    value={data.description}
+                    onChange={handleChange}
+                    rows="4"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                      errors.description ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="Tulis deskripsi lengkap produk..."
+                  ></textarea>
+                  {errors.description && (
+                    <p className="mt-1 text-sm text-red-500">{errors.description}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Harga & Stok */}
+            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Harga & Stok</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Stock */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Jumlah Stok <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="stock"
+                    value={data.stock}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                      errors.stock ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="0"
+                    min="0"
+                  />
+                  {errors.stock && (
+                    <p className="mt-1 text-sm text-red-500">{errors.stock}</p>
+                  )}
+                  <p className="mt-1 text-xs text-gray-500">Jumlah barang yang tersedia</p>
+                </div>
+
+                {/* Price */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Harga (Rp) <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="price"
+                    value={data.price}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                      errors.price ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="0"
+                    min="0"
+                  />
+                  {errors.price && (
+                    <p className="mt-1 text-sm text-red-500">{errors.price}</p>
+                  )}
+                  {data.price && (
+                    <p className="mt-1 text-sm text-blue-600 font-medium">
+                      {formatRupiah(data.price)}
+                    </p>
+                  )}
+                </div>
+
+                {/* Info Card */}
+                {data.stock && data.price && (
+                  <div className="md:col-span-2 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h3 className="text-sm font-semibold text-blue-900 mb-2">Ringkasan</h3>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-gray-600">Total Stok</p>
+                        <p className="text-lg font-bold text-gray-900">{data.stock} unit</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-600">Nilai Inventory</p>
+                        <p className="text-lg font-bold text-gray-900">
+                          {formatRupiah(data.stock * data.price)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex justify-between items-center bg-white rounded-lg shadow-md p-6">
+              <button
+                type="button"
+                onClick={handleReset}
+                disabled={processing}
+                className="px-6 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 font-medium"
+              >
+                <X className="w-5 h-5 inline mr-2" />
+                Reset Form
+              </button>
+              <button
+                type="submit"
+                disabled={processing}
+                className="px-8 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center font-medium shadow-md"
+              >
+                <Save className="w-5 h-5 mr-2" />
+                {processing ? 'Menyimpan...' : 'Simpan Produk'}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
 }
