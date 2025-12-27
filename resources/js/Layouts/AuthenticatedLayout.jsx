@@ -54,7 +54,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 activeMenu={activeMenu}
                 menuItems={filteredMenuItems}
             />
-            <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 flex flex-col">
                 <Nav
                     user={user}
                     isSidebarOpen={isSidebarOpen}

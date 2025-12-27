@@ -174,6 +174,59 @@ export default function Report({ auth, salesData = [], products }) {
                                 </div>
                             </div>
                         </div>
+
+                        {/*  */}
+                        {auth.user.role === 'admin' ? <>
+                            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow p-6 text-white">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-purple-100 text-sm">Total Staff</p>
+                                        <p className="text-3xl font-bold">8</p>
+                                    </div>
+                                    <Users size={40} className="opacity-80" />
+                                </div>
+                            </div>
+
+                            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow p-6 text-white">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-orange-100 text-sm">Pending Orders</p>
+                                        <p className="text-3xl font-bold">98</p>
+                                    </div>
+                                    <Activity size={40} className="opacity-80" />
+                                </div>
+                            </div>
+
+                            <div className="bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg shadow p-6 text-white">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-teal-100 text-sm">Kategori Produk</p>
+                                        <p className="text-3xl font-bold">24</p>
+                                    </div>
+                                    <BarChart3 size={40} className="opacity-80" />
+                                </div>
+                            </div>
+                        </> :
+                            <>
+
+                                {/* Quick Actions - Only Stock and Transaction */}
+                                <div className="bg-white rounded-lg shadow p-6 w-full">
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Aksi Cepat</h3>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <button className="p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition text-center">
+                                            <Package className="mx-auto mb-2 text-blue-600" size={32} />
+                                            <p className="text-base font-medium text-gray-700">Kelola Stok</p>
+                                            <p className="text-xs text-gray-500 mt-1">Update & Monitoring Stok</p>
+                                        </button>
+                                        <Link href={route('transactions.index')} className="p-6 bg-green-50 rounded-lg hover:bg-green-100 transition text-center">
+                                            <ShoppingCart className="mx-auto mb-2 text-green-600" size={32} />
+                                            <p className="text-base font-medium text-gray-700">Transaksi Penjualan</p>
+                                            <p className="text-xs text-gray-500 mt-1">Buat Transaksi Baru</p>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </>
+                        }
                     </div>
 
                     {/* TOOLBAR FILTER */}
@@ -354,57 +407,7 @@ export default function Report({ auth, salesData = [], products }) {
                     </div>
                     {/* Additional Stats */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                        {auth.user.role === 'admin' ? <>
-                            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow p-6 text-white">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-purple-100 text-sm">Total Staff</p>
-                                        <p className="text-3xl font-bold">8</p>
-                                    </div>
-                                    <Users size={40} className="opacity-80" />
-                                </div>
-                            </div>
 
-                            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow p-6 text-white">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-orange-100 text-sm">Pending Orders</p>
-                                        <p className="text-3xl font-bold">98</p>
-                                    </div>
-                                    <Activity size={40} className="opacity-80" />
-                                </div>
-                            </div>
-
-                            <div className="bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg shadow p-6 text-white">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-teal-100 text-sm">Kategori Produk</p>
-                                        <p className="text-3xl font-bold">24</p>
-                                    </div>
-                                    <BarChart3 size={40} className="opacity-80" />
-                                </div>
-                            </div>
-                        </> :
-                            <>
-
-                                {/* Quick Actions - Only Stock and Transaction */}
-                                <div className="bg-white rounded-lg shadow p-6 w-full">
-                                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Aksi Cepat</h3>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <button className="p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition text-center">
-                                            <Package className="mx-auto mb-2 text-blue-600" size={32} />
-                                            <p className="text-base font-medium text-gray-700">Kelola Stok</p>
-                                            <p className="text-xs text-gray-500 mt-1">Update & Monitoring Stok</p>
-                                        </button>
-                                        <Link href={route('transactions.index')} className="p-6 bg-green-50 rounded-lg hover:bg-green-100 transition text-center">
-                                            <ShoppingCart className="mx-auto mb-2 text-green-600" size={32} />
-                                            <p className="text-base font-medium text-gray-700">Transaksi Penjualan</p>
-                                            <p className="text-xs text-gray-500 mt-1">Buat Transaksi Baru</p>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </>
-                        }
                     </div>
 
                 </div>
