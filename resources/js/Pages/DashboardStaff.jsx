@@ -54,73 +54,68 @@ export default function Index({ auth, products = [] }) {
                         color="bg-red-500"
                     />
                 </div>
-                <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                     {/* Tabel Produk */}
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full text-left text-sm whitespace-nowrap">
-                            <thead className="uppercase tracking-wider border-b-2 border-gray-200 bg-gray-50">
-                                <tr>
-                                    <th scope="col" className="px-6 py-4">SKU</th>
-                                    <th scope="col" className="px-6 py-4">Nama Produk</th>
-                                    <th scope="col" className="px-6 py-4">Harga</th>
-                                    <th scope="col" className="px-6 py-4">Stok</th>
-                                    <th scope="col" className="px-6 py-4 text-right">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {products.map((product) => (
-                                    <tr key={product.id} className="border-b hover:bg-gray-50">
-                                        <td className="px-6 py-4 font-medium">{product.sku}</td>
-                                        <td className="px-6 py-4">{product.name}</td>
-                                        <td className="px-6 py-4">Rp {parseInt(product.price).toLocaleString()}</td>
-                                        <td className="px-6 py-4">
-                                            <span className={`px-2 py-1 rounded ${product.stock > 10 ? 'text-green-500' : 'text-red-500'}`}>
-                                                {product.stock}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <button
-                                                onClick={() => handleDelete(product.id)}
-                                                className="text-red-500 hover:text-red-700 ml-4"
-                                            >
-                                                Hapus
-                                            </button>
-                                            <Link
-                                                href={route('products.edit', product.id)}
-                                                className="flex flex-col items-center justify-center text-yellow-500 hover:text-red-700 ml-4"
-                                            >
-                                                <Pencil />
-                                                edit
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        {products.length === 0 && (
-                            <p className="text-center text-gray-500 mt-4">Belum ada data produk.</p>
-                        )}
-                    </div>
-                </div>
-                {/* Quick Actions */}
-                <div className="bg-white rounded-lg shadow p-6 mt-6">
-                    <h2 className="text-xl font-bold text-gray-800 mb-4">Menu Cepat</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                         <Link
                             href={route('products.create')}
-                            className="p-4 text-center bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition">
+                            className="inline-block mb-4 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition"
+                        >
                             Tambah Produk
                         </Link>
-                        <Link
-                            href={route('transactions.index')}
-                            className="p-4 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition text-left block"
-                        >
-                            Transaksi Penjualan
-                        </Link>
 
+                        {/* Tabel Produk */}
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full text-left text-sm whitespace-nowrap">
+                                <thead className="uppercase tracking-wider border-b-2 border-gray-200 bg-gray-50">
+                                    <tr>
+                                        <th scope="col" className="px-6 py-4">SKU</th>
+                                        <th scope="col" className="px-6 py-4">Nama Produk</th>
+                                        <th scope="col" className="px-6 py-4">Harga</th>
+                                        <th scope="col" className="px-6 py-4">Stok</th>
+                                        <th scope="col" className="px-6 py-4 text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {products.map((product) => (
+                                        <tr key={product.id} className="border-b hover:bg-gray-50">
+                                            <td className="px-6 py-4 font-medium">{product.sku}</td>
+                                            <td className="px-6 py-4">{product.name}</td>
+                                            <td className="px-6 py-4">Rp {parseInt(product.price).toLocaleString('id-ID')}</td>
+                                            <td className="px-6 py-4">
+                                                <span className={`px-2 py-1 rounded font-medium ${product.stock > 10
+                                                        ? 'bg-green-100 text-green-700'
+                                                        : 'bg-red-100 text-red-700'
+                                                    }`}>
+                                                    {product.stock}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <Link
+                                                        href={route('products.edit', product.id)}
+                                                        className="inline-flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition"
+                                                    >
+                                                        <Pencil size={16} />
+                                                        <span>Edit</span>
+                                                    </Link>
+                                                    <button
+                                                        onClick={() => handleDelete(product.id)}
+                                                        className="text-red-500 hover:text-red-700 transition"
+                                                    >
+                                                        Hapus
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {products.length === 0 && (
+                                <p className="text-center text-gray-500 mt-8 py-4">Belum ada data produk.</p>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
         </AuthenticatedLayout>
     );
 }

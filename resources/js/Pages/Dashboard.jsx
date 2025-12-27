@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
-import { Package, ShoppingCart, AlertTriangle, TrendingUp, ArrowRight } from 'lucide-react';
+import { Head } from '@inertiajs/react';
+import { Package, ShoppingCart, AlertTriangle } from 'lucide-react';
 
 export default function Dashboard({ auth, products = [] }) {
 
@@ -85,24 +85,6 @@ export default function Dashboard({ auth, products = [] }) {
                                 Data masih kosong.
                             </div>
                         )}
-                    </div>
-                </div>
-
-                {/* Menu Cepat */}
-                <div className="bg-white rounded-lg shadow p-6">
-                    <h2 className="text-xl font-bold text-gray-800 mb-4">Menu Cepat</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
-                        <Link
-                            href={route('products.index')}
-                            className="p-4 text-center bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition block"
-                        >
-                            Kelola Produk
-                        </Link>
-                        {/* 2. Tombol Transaksi (Ungu) - SEKARANG SUDAH AKTIF */}
-
-                        <Link href={route('report')} className="p-4 text-center bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition">
-                            Lihat Laporan
-                        </Link>
                     </div>
                 </div>
             </div>
