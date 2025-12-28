@@ -1,334 +1,228 @@
-import React, { useState } from 'react';
-import { BarChart3, Package, ShoppingCart, TrendingUp, Users, AlertTriangle, DollarSign, Activity } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Head, Link } from '@inertiajs/react';
+import { 
+    ArrowLeft, CheckCircle2, Database, 
+    ShoppingCart, FileBarChart, Users, 
+    ShieldCheck, Zap, Layers, ArrowRight, Sun, Moon 
+} from 'lucide-react';
 
-const StockPulseDashboard = () => {
-  const [userRole, setUserRole] = useState('admin'); // 'admin' or 'staff'
+export default function BlogSite() {
+    // --- 1. LOGIKA DARK MODE ---
+    const [isDark, setIsDark] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('theme') === 'dark' || 
+                (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        }
+        return false;
+    });
 
-  // Sample data
-  const statsData = {
-    admin: {
-      totalProducts: 1247,
-      lowStock: 23,
-      todaySales: 156,
-      revenue: 45670000,
-      totalStaff: 8,
-      pendingOrders: 12
-    },
-    staff: {
-      totalProducts: 1247,
-      lowStock: 23,
-      todaySales: 156,
-      recentActivity: 34
-    }
-  };
+    useEffect(() => {
+        const root = window.document.documentElement;
+        if (isDark) {
+            root.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            root.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [isDark]);
 
-  const recentSales = [
-    { id: 'INV-001', customer: 'Andi Pratama', items: 5, total: 450000, time: '10:30' },
-    { id: 'INV-002', customer: 'Siti Nurhaliza', items: 3, total: 280000, time: '11:15' },
-    { id: 'INV-003', customer: 'Budi Santoso', items: 8, total: 670000, time: '12:00' },
-    { id: 'INV-004', customer: 'Dewi Lestari', items: 2, total: 150000, time: '13:20' }
-  ];
+    return (
+        <>
+            <Head title="Tentang & Cara Kerja - StockPulse" />
+            
+            <div className="min-h-screen bg-[#fcfcfc] dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+                
+                {/* --- NAVBAR --- */}
+                <nav className="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-gray-200 dark:border-slate-800">
+                    <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+                        <Link href="/" className="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-blue-600 transition font-medium">
+                            <ArrowLeft size={20} />
+                            <span>Kembali</span>
+                        </Link>
+                        
+                        <div className="flex items-center gap-4">
+                            {/* TOMBOL TOGGLE DARK MODE */}
+                            <button 
+                                onClick={() => setIsDark(!isDark)}
+                                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-600 dark:text-gray-300 transition-colors"
+                                title="Ubah Tema"
+                            >
+                                {isDark ? <Sun size={20} /> : <Moon size={20} />}
+                            </button>
 
-  const lowStockProducts = [
-    { name: 'Mie Instan Goreng', stock: 15, min: 50, category: 'Makanan' },
-    { name: 'Sabun Mandi Cair', stock: 8, min: 30, category: 'Kebersihan' },
-    { name: 'Susu UHT 1L', stock: 12, min: 40, category: 'Minuman' },
-    { name: 'Tissue Wajah', stock: 5, min: 25, category: 'Kebersihan' }
-  ];
+                            <div className="h-6 w-px bg-gray-200 dark:bg-slate-700 mx-1"></div>
 
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
+                            <div className="font-bold text-lg tracking-tight">
+                                Stock<span className="text-blue-600">Pulse</span> Docs
+                            </div>
+                        </div>
+                    </div>
+                </nav>
 
-  const AdminDashboard = () => (
-    <div className="space-y-6">
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Total Produk</p>
-              <p className="text-2xl font-bold text-gray-800">{statsData.admin.totalProducts}</p>
+                {/* --- HERO SECTION --- */}
+                <header className="pt-20 pb-16 px-6 text-center max-w-4xl mx-auto">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider mb-6">
+                        <Zap size={14} /> Tentang Aplikasi
+                    </div>
+                    <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-tight mb-6">
+                        Solusi Manajemen Stok <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">
+                            Terintegrasi & Realtime.
+                        </span>
+                    </h1>
+                    <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
+                        StockPulse dibuat untuk menyelesaikan masalah selisih stok yang sering terjadi di toko ritel. 
+                        Tujuannya adalah mendigitalkan pencatatan manual menjadi sistem otomatis yang akurat.
+                    </p>
+                </header>
+
+                {/* --- CARA KERJA SISTEM --- */}
+                <section className="py-20 bg-white dark:bg-slate-900 border-y border-gray-100 dark:border-slate-800">
+                    <div className="max-w-6xl mx-auto px-6">
+                        <div className="text-center mb-16 text-slate-900 dark:text-white">
+                            <h2 className="text-3xl font-bold mb-4">Bagaimana Cara Kerjanya?</h2>
+                            <p className="text-slate-500 dark:text-slate-400">Sistem bekerja dalam siklus otomatis yang menghubungkan gudang dan kasir.</p>
+                        </div>
+
+                        <div className="grid md:grid-cols-4 gap-8 relative">
+                            <div className="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gradient-to-r from-blue-200 via-blue-200 to-transparent dark:from-blue-900 dark:via-blue-900 -z-10"></div>
+
+                            <div className="relative bg-white dark:bg-slate-900 p-6 pt-0 text-center group">
+                                <div className="w-24 h-24 mx-auto bg-blue-50 dark:bg-slate-800 rounded-full border-4 border-white dark:border-slate-900 flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                                    <Database className="text-blue-600 w-10 h-10" />
+                                </div>
+                                <h3 className="text-xl font-bold mb-2 dark:text-white">1. Input Data</h3>
+                                <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
+                                    Admin atau Staff menginput data produk (Nama, Harga, SKU, dan Stok Awal) ke dalam sistem.
+                                </p>
+                            </div>
+
+                            <div className="relative bg-white dark:bg-slate-900 p-6 pt-0 text-center group">
+                                <div className="w-24 h-24 mx-auto bg-purple-50 dark:bg-slate-800 rounded-full border-4 border-white dark:border-slate-900 flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                                    <ShoppingCart className="text-purple-600 w-10 h-10" />
+                                </div>
+                                <h3 className="text-xl font-bold mb-2 dark:text-white">2. Transaksi</h3>
+                                <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
+                                    Kasir memproses pembelian pelanggan. Sistem menghitung total harga secara otomatis.
+                                </p>
+                            </div>
+
+                            <div className="relative bg-white dark:bg-slate-900 p-6 pt-0 text-center group">
+                                <div className="w-24 h-24 mx-auto bg-yellow-50 dark:bg-slate-800 rounded-full border-4 border-white dark:border-slate-900 flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                                    <Zap className="text-yellow-600 w-10 h-10" />
+                                </div>
+                                <h3 className="text-xl font-bold mb-2 dark:text-white">3. Auto-Sync</h3>
+                                <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
+                                    Saat transaksi selesai, <span className="font-bold text-slate-900 dark:text-white">stok otomatis berkurang</span> detik itu juga.
+                                </p>
+                            </div>
+
+                            <div className="relative bg-white dark:bg-slate-900 p-6 pt-0 text-center group">
+                                <div className="w-24 h-24 mx-auto bg-green-50 dark:bg-slate-800 rounded-full border-4 border-white dark:border-slate-900 flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                                    <FileBarChart className="text-green-600 w-10 h-10" />
+                                </div>
+                                <h3 className="text-xl font-bold mb-2 dark:text-white">4. Laporan</h3>
+                                <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
+                                    Pemilik toko bisa melihat grafik pendapatan dan stok menipis secara realtime di Dashboard.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* --- ROLE SECTION --- */}
+                <section className="py-20 px-6 max-w-5xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl font-bold mb-4 dark:text-white text-slate-900">Siapa yang Menggunakan?</h2>
+                        <p className="text-slate-500 dark:text-slate-400">Sistem ini membagi hak akses agar data tetap aman.</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-6">
+                        <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm hover:border-red-500 transition-colors">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="bg-red-100 dark:bg-red-900/30 p-3 rounded-lg text-red-600">
+                                    <ShieldCheck size={24} />
+                                </div>
+                                <div>
+                                    <h4 className="font-bold text-lg dark:text-white">Admin</h4>
+                                    <p className="text-xs text-slate-500 uppercase font-bold">Akses Penuh</p>
+                                </div>
+                            </div>
+                            <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                                <li className="flex gap-2"><CheckCircle2 size={16} className="text-red-500" /> Mengelola User</li>
+                                <li className="flex gap-2"><CheckCircle2 size={16} className="text-red-500" /> Laporan Keuangan</li>
+                            </ul>
+                        </div>
+
+                        <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm hover:border-blue-500 transition-colors">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg text-blue-600">
+                                    <Layers size={24} />
+                                </div>
+                                <div>
+                                    <h4 className="font-bold text-lg dark:text-white">Staff</h4>
+                                    <p className="text-xs text-slate-500 uppercase font-bold">Gudang</p>
+                                </div>
+                            </div>
+                            <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                                <li className="flex gap-2"><CheckCircle2 size={16} className="text-blue-500" /> Kelola Stok</li>
+                                <li className="flex gap-2"><CheckCircle2 size={16} className="text-blue-500" /> Update Produk</li>
+                            </ul>
+                        </div>
+
+                        <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm hover:border-green-500 transition-colors">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="bg-green-100 dark:bg-green-900/30 p-3 rounded-lg text-green-600">
+                                    <ShoppingCart size={24} />
+                                </div>
+                                <div>
+                                    <h4 className="font-bold text-lg dark:text-white">Kasir</h4>
+                                    <p className="text-xs text-slate-500 uppercase font-bold">Point of Sale</p>
+                                </div>
+                            </div>
+                            <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                                <li className="flex gap-2"><CheckCircle2 size={16} className="text-green-500" /> Transaksi Cepat</li>
+                                <li className="flex gap-2"><CheckCircle2 size={16} className="text-green-500" /> Print Struk</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                {/* --- CALL TO ACTION --- */}
+                <section className="py-24 px-6">
+                    <div className="max-w-5xl mx-auto bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[2.5rem] p-10 md:p-16 text-center shadow-2xl shadow-blue-200 dark:shadow-none relative overflow-hidden">
+                        <div className="relative z-10">
+                            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-6">
+                                Tertarik Menggunakan?
+                            </h2>
+                            <p className="text-blue-100 text-lg md:text-xl font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
+                                Jangan biarkan stok berantakan menghambat bisnis Anda. 
+                                Bergabunglah sekarang dan rasakan kemudahan manajemen inventory yang sesungguhnya.
+                            </p>
+                            
+                            <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                <Link 
+                                    href={route('register')} 
+                                    className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 rounded-2xl font-bold text-lg hover:bg-blue-50 hover:scale-105 transition shadow-lg"
+                                >
+                                    Register Sekarang <ArrowRight className="ml-2 w-5 h-5" />
+                                </Link>
+                                <Link 
+                                    href={route('login')} 
+                                    className="inline-flex items-center justify-center px-8 py-4 bg-blue-700/50 text-white border border-blue-400/30 rounded-2xl font-bold text-lg hover:bg-blue-700 transition"
+                                >
+                                    Login Akun
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <footer className="py-16 text-center text-sm text-black dark:text-white/70 transition-colors">
+                Dibuat dengan ❤️ oleh Kelompok 1
+                </footer>
             </div>
-            <Package className="text-blue-500" size={40} />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Stok Menipis</p>
-              <p className="text-2xl font-bold text-gray-800">{statsData.admin.lowStock}</p>
-            </div>
-            <AlertTriangle className="text-red-500" size={40} />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Penjualan Hari Ini</p>
-              <p className="text-2xl font-bold text-gray-800">{statsData.admin.todaySales}</p>
-            </div>
-            <ShoppingCart className="text-green-500" size={40} />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Pendapatan Hari Ini</p>
-              <p className="text-xl font-bold text-gray-800">{formatCurrency(statsData.admin.revenue)}</p>
-            </div>
-            <DollarSign className="text-yellow-500" size={40} />
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Sales */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">Transaksi Terbaru</h3>
-            <TrendingUp className="text-gray-400" size={20} />
-          </div>
-          <div className="space-y-3">
-            {recentSales.map((sale) => (
-              <div key={sale.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-                <div className="flex-1">
-                  <p className="font-medium text-gray-800">{sale.customer}</p>
-                  <p className="text-sm text-gray-500">{sale.id} • {sale.items} items • {sale.time}</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold text-green-600">{formatCurrency(sale.total)}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Low Stock Alert */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">Peringatan Stok Menipis</h3>
-            <AlertTriangle className="text-red-500" size={20} />
-          </div>
-          <div className="space-y-3">
-            {lowStockProducts.map((product, idx) => (
-              <div key={idx} className="p-3 bg-red-50 rounded-lg border border-red-200">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <p className="font-medium text-gray-800">{product.name}</p>
-                    <p className="text-xs text-gray-500">{product.category}</p>
-                  </div>
-                  <span className="text-xs bg-red-200 text-red-800 px-2 py-1 rounded">Urgent</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 bg-white rounded-full h-2">
-                    <div 
-                      className="bg-red-500 h-2 rounded-full" 
-                      style={{width: `${(product.stock / product.min) * 100}%`}}
-                    ></div>
-                  </div>
-                  <span className="text-sm font-semibold text-red-600">{product.stock}/{product.min}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Additional Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-purple-100 text-sm">Total Staff</p>
-              <p className="text-3xl font-bold">{statsData.admin.totalStaff}</p>
-            </div>
-            <Users size={40} className="opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-orange-100 text-sm">Pending Orders</p>
-              <p className="text-3xl font-bold">{statsData.admin.pendingOrders}</p>
-            </div>
-            <Activity size={40} className="opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg shadow p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-teal-100 text-sm">Kategori Produk</p>
-              <p className="text-3xl font-bold">24</p>
-            </div>
-            <BarChart3 size={40} className="opacity-80" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const StaffDashboard = () => (
-    <div className="space-y-6">
-      {/* Stats Grid - Only Stock and Transaction */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Total Produk (Stok)</p>
-              <p className="text-2xl font-bold text-gray-800">{statsData.staff.totalProducts}</p>
-            </div>
-            <Package className="text-blue-500" size={40} />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Transaksi Hari Ini</p>
-              <p className="text-2xl font-bold text-gray-800">{statsData.staff.todaySales}</p>
-            </div>
-            <ShoppingCart className="text-green-500" size={40} />
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Transactions */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">Transaksi Terbaru</h3>
-            <ShoppingCart className="text-gray-400" size={20} />
-          </div>
-          <div className="space-y-3">
-            {recentSales.map((sale) => (
-              <div key={sale.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex-1">
-                  <p className="font-medium text-gray-800">{sale.customer}</p>
-                  <p className="text-sm text-gray-500">{sale.id} • {sale.items} items</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-gray-500">{sale.time}</p>
-                  <p className="font-semibold text-green-600">{formatCurrency(sale.total)}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Low Stock Alert */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">Stok Perlu Diperhatikan</h3>
-            <AlertTriangle className="text-red-500" size={20} />
-          </div>
-          <div className="space-y-3">
-            {lowStockProducts.map((product, idx) => (
-              <div key={idx} className="p-3 bg-red-50 rounded-lg border border-red-200">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <p className="font-medium text-gray-800">{product.name}</p>
-                    <p className="text-xs text-gray-500">{product.category}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 bg-white rounded-full h-2">
-                    <div 
-                      className="bg-red-500 h-2 rounded-full" 
-                      style={{width: `${(product.stock / product.min) * 100}%`}}
-                    ></div>
-                  </div>
-                  <span className="text-sm font-semibold text-red-600">{product.stock}/{product.min}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Actions - Only Stock and Transaction */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Aksi Cepat</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <button className="p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition text-center">
-            <Package className="mx-auto mb-2 text-blue-600" size={32} />
-            <p className="text-base font-medium text-gray-700">Kelola Stok</p>
-            <p className="text-xs text-gray-500 mt-1">Update & Monitoring Stok</p>
-          </button>
-          <button className="p-6 bg-green-50 rounded-lg hover:bg-green-100 transition text-center">
-            <ShoppingCart className="mx-auto mb-2 text-green-600" size={32} />
-            <p className="text-base font-medium text-gray-700">Transaksi Penjualan</p>
-            <p className="text-xs text-gray-500 mt-1">Buat Transaksi Baru</p>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800">StockPulse</h1>
-              <p className="text-gray-600">Sistem Inventory Toko</p>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setUserRole('admin')}
-                className={`px-4 py-2 rounded-lg font-medium transition ${
-                  userRole === 'admin'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                Admin
-              </button>
-              <button
-                onClick={() => setUserRole('staff')}
-                className={`px-4 py-2 rounded-lg font-medium transition ${
-                  userRole === 'staff'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                Staff Gudang
-              </button>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500">Logged in as</p>
-                <p className="font-semibold text-gray-800">
-                  {userRole === 'admin' ? 'Administrator' : 'Staff Gudang - Ahmad'}
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-sm text-gray-500">Tanggal</p>
-                <p className="font-semibold text-gray-800">20 Desember 2025</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Dashboard Content */}
-        {userRole === 'admin' ? <AdminDashboard /> : <StaffDashboard />}
-      </div>
-    </div>
-  );
-};
-
-export default StockPulseDashboard;
+        </>
+    );
+} 

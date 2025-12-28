@@ -23,6 +23,7 @@ export default function Sidebar({ isOpen }) {
             icon: LayoutDashboard,
             roles: ['admin', 'staff', 'kasir']
         },
+        
         {
             name: 'Kelola Produk',
             route: 'products.index',
