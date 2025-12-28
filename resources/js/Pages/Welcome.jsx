@@ -1,14 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { Head, Link } from '@inertiajs/react';
-// Tambahkan CircleUserRound ke daftar import lucide-react
-import { Package, TrendingUp, ShoppingCart, BarChart3, Users, Shield, Sun, Moon, CircleUserRound } from 'lucide-react'; 
+import { Package, TrendingUp, ShoppingCart, BarChart3, Users, Shield, Sun, Moon, CircleUserRound } from 'lucide-react';
 import Dropdown from '@/Components/Dropdown'; // Pastikan komponen Dropdown bawaan Breeze diimport
+import { motion } from 'framer-motion';
 
 export default function Welcome({ auth }) {
+
+
+    const packages = [
+        { id: 1, size: 50, left: '10%', top: '20%', delay: 0, duration: 3 },
+        { id: 2, size: 40, left: '85%', top: '15%', delay: 0.5, duration: 3.5 },
+        { id: 3, size: 45, left: '15%', top: '70%', delay: 1, duration: 3.2 },
+        { id: 4, size: 35, left: '90%', top: '75%', delay: 1.5, duration: 2.8 },
+        { id: 5, size: 55, left: '50%', top: '10%', delay: 0.8, duration: 3.3 },
+        { id: 6, size: 38, left: '50%', top: '85%', delay: 1.2, duration: 3.1 }
+    ];
+
+    // Variants untuk animasi bounce
+    const bounceVariants = {
+        animate: (custom) => ({
+            y: [0, -20, 0],
+            transition: {
+                duration: custom.duration,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: custom.delay
+            }
+        })
+    };
+
     // --- 3. LOGIKA DARK MODE ---
     const [isDark, setIsDark] = useState(() => {
         if (typeof window !== 'undefined') {
-            return localStorage.getItem('theme') === 'dark' || 
+            return localStorage.getItem('theme') === 'dark' ||
                 (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
         }
         return false;
@@ -28,10 +52,10 @@ export default function Welcome({ auth }) {
     return (
         <>
             <Head title="Welcome" />
-            
+
             {/* Background Utama */}
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900 transition-colors duration-300">
-                
+
                 <header className="bg-white shadow-sm dark:bg-slate-900 dark:border-b dark:border-slate-800 transition-colors">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
                         <div className="flex items-center justify-between">
@@ -42,12 +66,12 @@ export default function Welcome({ auth }) {
                                 </div>
                                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">StockPulse</h1>
                             </div>
-                            
+
                             {/* Navigation Section */}
                             <nav className="flex items-center gap-4">
-                                
+
                                 {/* Tombol Toggle Dark Mode */}
-                                <button 
+                                <button
                                     onClick={() => setIsDark(!isDark)}
                                     className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-600 dark:text-gray-300 transition-colors focus:outline-none"
                                 >
@@ -115,23 +139,88 @@ export default function Welcome({ auth }) {
                 </header>
 
                 {/* Hero Section */}
-                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-                    <div className="text-center">
-                        <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
-                            Kelola Inventory Toko Anda dengan <span className="text-blue-600 dark:text-blue-400">Mudah</span>
-                        </h2>
-                        <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+                <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-40 overflow-hidden">
+                    {/* Floating Packages Background */}
+                    <div className="absolute inset-0 pointer-events-none">
+                        {packages.map((pkg) => (
+                            <motion.div
+                                key={pkg.id}
+                                className="absolute"
+                                style={{
+                                    left: pkg.left,
+                                    top: pkg.top,
+                                    width: `${pkg.size}px`,
+                                    height: `${pkg.size}px`,
+                                }}
+                                custom={{ duration: pkg.duration, delay: pkg.delay }}
+                                variants={bounceVariants}
+                                animate="animate"
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 0.15 }}
+                                viewport={{ once: true }}
+                            >
+                                <Package
+                                    className="text-blue-600 dark:text-blue-400 w-full h-full"
+                                    strokeWidth={1.5}
+                                />
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* Content with entrance animation */}
+                    <div className="relative z-10 text-center">
+                        <motion.h2
+                            className="text-5xl font-bold text-gray-900 dark:text-white mb-6"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            Kelola Inventory Toko Anda dengan{' '}
+                            <span className="text-blue-600 dark:text-blue-400">Mudah</span>
+                        </motion.h2>
+
+                        <motion.p
+                            className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                        >
                             Sistem inventory yang powerful untuk mengelola stok barang, transaksi penjualan,
                             dan laporan toko Anda secara real-time
-                        </p>
-                        <div className="flex justify-center gap-4">
-                            <Link href={route('register')} className="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-lg font-semibold shadow-lg">
-                                Mulai Sekarang  
+                        </motion.p>
+
+                        <motion.div
+                            className="flex justify-center gap-4 flex-wrap"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.4 }}
+                        >
+                            <Link
+                                href="/register"
+                                className="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-lg font-semibold shadow-lg"
+                            >
+                                <motion.span
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="inline-block"
+                                >
+                                    Mulai Sekarang
+                                </motion.span>
                             </Link>
-                            <Link href={route('blogSite')} className="px-8 py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 border-2 border-blue-600 dark:border-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-700 transition text-lg font-semibold">
-                                Pelajari Lebih Lanjut
+
+                            <Link
+                                href="/blog"
+                                className="px-8 py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 border-2 border-blue-600 dark:border-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-700 transition text-lg font-semibold"
+                            >
+                                <motion.span
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="inline-block"
+                                >
+                                    Pelajari Lebih Lanjut
+                                </motion.span>
                             </Link>
-                        </div>
+                        </motion.div>
                     </div>
                 </section>
 
@@ -197,7 +286,7 @@ export default function Welcome({ auth }) {
                             </div>
                             <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Keamanan Terjamin</h4>
                             <p className="text-gray-600 dark:text-gray-400">
-                                Sistem autentikasi JWT dan enkripsi data untuk keamanan maksimal.
+                                Sistem autentikasi Laravel Sanctum dan enkripsi data untuk keamanan maksimal.
                             </p>
                         </div>
                     </div>
