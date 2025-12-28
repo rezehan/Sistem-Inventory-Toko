@@ -7,7 +7,7 @@ import {
     Users, 
 } from 'lucide-react';
 
-export default function Sidebar({ isOpen }) {
+export default function Sidebar({ isOpen, menuItems }) {
     const { auth } = usePage().props;
 
     // Cek keamanan data auth
@@ -15,40 +15,6 @@ export default function Sidebar({ isOpen }) {
 
     const userRole = auth.user.role || '';
 
-    // --- DAFTAR MENU ---
-    const menuList = [
-        {
-            name: 'Dashboard',
-            route: 'dashboard',
-            icon: LayoutDashboard,
-            roles: ['admin', 'staff', 'kasir']
-        },
-        
-        {
-            name: 'Kelola Produk',
-            route: 'products.index',
-            icon: Package,
-            roles: ['admin', 'staff']
-        },
-        {
-            name: 'Transaksi Kasir',
-            route: 'transactions.index',
-            icon: ShoppingCart,
-            roles: ['admin', 'staff', 'kasir']
-        },
-        {
-            name: 'Laporan',
-            route: 'reports.index',
-            icon: FileText,
-            roles: ['admin']
-        },
-        {
-            name: 'Kelola User',
-            route: 'users.index',
-            icon: Users,
-            roles: ['admin']
-        }
-    ];
 
     const isUrlActive = (routeName) => {
         try { return route().current(routeName); } catch (e) { return false; }
@@ -56,7 +22,7 @@ export default function Sidebar({ isOpen }) {
 
     return (
         <aside 
-            className={`${isOpen ? 'w-72' : 'w-0'} transition-all duration-300 overflow-hidden bg-white border-r h-screen shadow-lg relative z-30 flex flex-col`}
+            className={`${isOpen ? 'w-72' : 'w-0'} transition-all duration-300 overflow-hidden bg-white border-r h-screen shadow-lg sticky top-0 z-30 flex flex-col`}
         >
             {/* --- BAGIAN LOGO (KEMBALI KE IKON) --- */}
             <div className="p-6 border-b flex flex-col items-center justify-center gap-3 bg-gray-50/50 h-auto shrink-0">
@@ -75,7 +41,7 @@ export default function Sidebar({ isOpen }) {
 
             {/* --- BAGIAN MENU --- */}
             <nav className="flex-1 overflow-y-auto py-6 px-3 flex flex-col gap-1">
-                {menuList.map((item, index) => {
+                {menuItems.map((item, index) => {
                     if (item.roles && !item.roles.includes(userRole)) return null;
                     
                     const Icon = item.icon;
@@ -98,21 +64,6 @@ export default function Sidebar({ isOpen }) {
                     );
                 })}
             </nav>
-
-            {/* --- BAGIAN PROFIL --- */}
-            <div className="p-4 border-t bg-gray-50 shrink-0">
-                <div className="flex items-center gap-3 overflow-hidden">
-                    <div className={`w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-white text-sm font-bold uppercase shadow-sm ${
-                        userRole === 'admin' ? 'bg-red-500' : userRole === 'staff' ? 'bg-blue-500' : 'bg-green-500'
-                    }`}>
-                        {auth.user.name.charAt(0)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-gray-700 truncate">{auth.user.name}</p>
-                        <p className="text-xs text-gray-500 uppercase tracking-wider truncate">{userRole || 'User'}</p>
-                    </div>
-                </div>
-            </div>
         </aside>
     );
 }

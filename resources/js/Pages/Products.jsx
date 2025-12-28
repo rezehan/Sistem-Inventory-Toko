@@ -105,81 +105,81 @@ export default function Index({ auth, products = [] }) {
 
                     {/* --- 3. TABEL PRODUK --- */}
                     <div className="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100">
-                        <div className="overflow-x-auto">
-                            <table className="min-w-full text-left text-sm whitespace-nowrap">
-                                <thead className="bg-gray-50 border-b border-gray-100 uppercase tracking-wider text-xs font-semibold text-gray-600">
-                                    <tr>
-                                        <th className="px-6 py-4">SKU</th>
-                                        <th className="px-6 py-4">Nama Produk</th>
-                                        <th className="px-6 py-4">Harga</th>
-                                        <th className="px-6 py-4 text-center">Stok</th>
-                                        <th className="px-6 py-4 text-right">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-100 bg-white">
-                                    {filteredProducts.length > 0 ? (
-                                        filteredProducts.map((product) => (
-                                            <tr key={product.id} className="hover:bg-gray-50 transition-colors">
-                                                <td className="px-6 py-4 font-mono text-gray-500">
-                                                    {product.sku}
-                                                </td>
-                                                <td className="px-6 py-4 font-medium text-gray-900">
-                                                    {product.name}
-                                                </td>
-                                                <td className="px-6 py-4 text-gray-700">
-                                                    Rp {parseInt(product.price).toLocaleString('id-ID')}
-                                                </td>
-                                                <td className="px-6 py-4 text-center">
-                                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border
-                                                        ${product.stock > 9
-                                                            ? 'bg-green-50 text-green-700 border-green-200'
-                                                            : product.stock > 0
-                                                                ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
-                                                                : 'bg-red-50 text-red-700 border-red-200'
-                                                        }`}>
-                                                        {product.stock}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-4 text-right">
-                                                    <div className="flex justify-end gap-3">
-                                                        <Link
-                                                            href={route('products.edit', product.id)}
-                                                            className="text-yellow-600 hover:text-yellow-800 transition p-1 hover:bg-yellow-50 rounded"
-                                                            title="Edit"
-                                                        >
-                                                            <Pencil size={18} />
-                                                        </Link>
-                                                        <button
-                                                            onClick={() => handleDelete(product.id)}
-                                                            className="text-red-500 hover:text-red-700 transition p-1 hover:bg-red-50 rounded"
-                                                            title="Hapus"
-                                                        >
-                                                            <Trash2 size={18} />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
-                                                <Package className="mx-auto h-12 w-12 text-gray-300 mb-3" />
-                                                <p>Tidak ada produk ditemukan.</p>
-                                                {search && (
-                                                    <button 
-                                                        onClick={() => setSearch('')}
-                                                        className="text-blue-600 hover:underline mt-1 text-sm"
-                                                    >
-                                                        Bersihkan pencarian
-                                                    </button>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+    <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+        <table className="min-w-full text-left text-sm whitespace-nowrap">
+            <thead className="bg-gray-50 border-b border-gray-100 uppercase tracking-wider text-xs font-semibold text-gray-600 sticky top-0 z-10">
+                <tr>
+                    <th className="px-6 py-4">SKU</th>
+                    <th className="px-6 py-4">Nama Produk</th>
+                    <th className="px-6 py-4">Harga</th>
+                    <th className="px-6 py-4 text-center">Stok</th>
+                    <th className="px-6 py-4 text-right">Aksi</th>
+                </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 bg-white">
+                {filteredProducts.length > 0 ? (
+                    filteredProducts.map((product) => (
+                        <tr key={product.id} className="hover:bg-gray-50 transition-colors">
+                            <td className="px-6 py-4 font-mono text-gray-500">
+                                {product.sku}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-900">
+                                {product.name}
+                            </td>
+                            <td className="px-6 py-4 text-gray-700">
+                                Rp {parseInt(product.price).toLocaleString('id-ID')}
+                            </td>
+                            <td className="px-6 py-4 text-center">
+                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border
+                                    ${product.stock > 9
+                                        ? 'bg-green-50 text-green-700 border-green-200'
+                                        : product.stock > 0
+                                            ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                                            : 'bg-red-50 text-red-700 border-red-200'
+                                    }`}>
+                                    {product.stock}
+                                </span>
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                                <div className="flex justify-end gap-3">
+                                    <Link
+                                        href={route('products.edit', product.id)}
+                                        className="text-yellow-600 hover:text-yellow-800 transition p-1 hover:bg-yellow-50 rounded"
+                                        title="Edit"
+                                    >
+                                        <Pencil size={18} />
+                                    </Link>
+                                    <button
+                                        onClick={() => handleDelete(product.id)}
+                                        className="text-red-500 hover:text-red-700 transition p-1 hover:bg-red-50 rounded"
+                                        title="Hapus"
+                                    >
+                                        <Trash2 size={18} />
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    ))
+                ) : (
+                    <tr>
+                        <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                            <Package className="mx-auto h-12 w-12 text-gray-300 mb-3" />
+                            <p>Tidak ada produk ditemukan.</p>
+                            {search && (
+                                <button 
+                                    onClick={() => setSearch('')}
+                                    className="text-blue-600 hover:underline mt-1 text-sm"
+                                >
+                                    Bersihkan pencarian
+                                </button>
+                            )}
+                        </td>
+                    </tr>
+                )}
+            </tbody>
+        </table>
+    </div>
+</div>
 
                 </div>
             </div>

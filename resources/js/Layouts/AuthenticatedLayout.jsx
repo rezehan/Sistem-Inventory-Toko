@@ -33,7 +33,7 @@ export default function AuthenticatedLayout({ header, children }) {
         { id: 'dashboard', name: 'Dashboard', route: 'dashboard', icon: Home, roles: ['admin', 'staff'] },
         { id: 'produk', name: 'Kelola Produk', route: 'products.index', icon: Package, roles: ['staff', 'admin'] },
         { id: 'transaksi', name: 'Transaksi', route: 'transactions.index', icon: ShoppingCart, roles: ['kasir', 'admin'] },
-        { id: 'laporan', name: 'Laporan', route: 'report', icon: FileText, roles: ['admin', 'staff'] },
+        { id: 'laporan', name: 'Laporan', route: 'reports.index', icon: FileText, roles: ['admin', 'staff'] },
     ];
 
     const activeMenu = getActiveMenu();
@@ -48,7 +48,7 @@ export default function AuthenticatedLayout({ header, children }) {
     };
 
     return (
-        <div className='flex h-screen bg-gray-50'>
+        <div className='flex bg-gray-50'>
             <Sidebar
                 isOpen={isSidebarOpen}
                 activeMenu={activeMenu}

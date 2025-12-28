@@ -191,7 +191,7 @@ export default function TransactionIndex({ auth, products, invoice_code }) { // 
                                     <Search className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
                                 </div>
 
-                                <div className="overflow-x-auto">
+                                <div className="max-h-[500px] overflow-y-auto border rounded-">
                                     <table className="w-full">
                                         <thead className="bg-gray-50 border-b">
                                             <tr>
@@ -211,7 +211,7 @@ export default function TransactionIndex({ auth, products, invoice_code }) { // 
                                                         </td>
                                                         <td className="px-4 py-3 text-sm text-gray-900">
                                                             <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                                                                product.stock > 9 ? 'bg-green-100 text-green-800' : 
+                                                                product.stock > 10 ? 'bg-green-100 text-green-800' : 
                                                                 product.stock > 0 ? 'bg-yellow-100 text-yellow-800' : 
                                                                 'bg-red-100 text-red-800'
                                                             }`}>
