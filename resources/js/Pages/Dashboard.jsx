@@ -2,10 +2,14 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { Package, ShoppingCart, AlertTriangle } from 'lucide-react';
 
-export default function Dashboard({ auth, products = [] }) {
+// Tambahkan prop 'todayTransactions' di sini
+export default function Dashboard({ auth, products = [], todayTransactions = 0 }) {
 
+    // Hitung total produk secara realtime dari data yang dikirim
     const totalProduk = products.length;
-    const stokMenipis = products.filter(p => p.stock <= 10).length;
+    
+    // Hitung stok menipis secara realtime
+    const stokMenipis = products.filter(p => p.stock < 10).length;
 
     const StatCard = ({ icon: Icon, title, value, color }) => (
         <div className="bg-white rounded-lg shadow p-6">
@@ -29,10 +33,26 @@ export default function Dashboard({ auth, products = [] }) {
 
                 {/* Statistik */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    <StatCard icon={Package} title="Total Produk" value={totalProduk} color="bg-blue-500" />
-                    <StatCard icon={ShoppingCart} title="Transaksi Hari Ini" value="47" color="bg-green-500" />
-                    <StatCard icon={AlertTriangle} title="Stok Menipis" value={stokMenipis} color="bg-red-500" />
-                    {/* <StatCard icon={TrendingUp} title="Penjualan Bulan Ini" value="Rp 7.2M" color="bg-purple-500" /> */}
+                    <StatCard 
+                        icon={Package} 
+                        title="Total Produk" 
+                        value={totalProduk} 
+                        color="bg-blue-500" 
+                    />
+                    
+                    <StatCard 
+                        icon={ShoppingCart} 
+                        title="Transaksi Hari Ini" 
+                        value={todayTransactions} // <--- Menggunakan data realtime dari database
+                        color="bg-green-500" 
+                    />
+                    
+                    <StatCard 
+                        icon={AlertTriangle} 
+                        title="Stok Menipis (<10)" 
+                        value={stokMenipis} 
+                        color="bg-red-500" 
+                    />
                 </div>
 
                 {/* Tabel Semua Produk (READ ONLY) */}
@@ -42,18 +62,13 @@ export default function Dashboard({ auth, products = [] }) {
                             Semua Data Inventory ({totalProduk} Items)
                         </h2>
                     </div>
-                    {/* FITUR SCROLL: 
-                        max-h-[500px] = Tinggi maksimal tabel sekitar 500px
-                        overflow-y-auto = Munculkan scrollbar jika data melebihi tinggi
-                    */}
+                    
                     <div className="max-h-[500px] overflow-y-auto border rounded-lg">
                         <table className="min-w-full text-left text-sm whitespace-nowrap">
-                            {/* Header dibuat sticky agar tetap terlihat saat discroll */}
                             <thead className="uppercase tracking-wider border-b-2 border-gray-200 bg-gray-50 sticky top-0 z-10">
                                 <tr>
                                     <th className="px-6 py-4 bg-gray-50">SKU</th>
                                     <th className="px-6 py-4 bg-gray-50">Nama Produk</th>
-                                    {/* <th className="px-6 py-4 bg-gray-50">Tanggal Masuk</th> */}
                                     <th className="px-6 py-4 bg-gray-50">Harga</th>
                                     <th className="px-6 py-4 bg-gray-50">Stok</th>
                                     <th className="px-6 py-4 bg-gray-50">Status</th>
@@ -64,16 +79,11 @@ export default function Dashboard({ auth, products = [] }) {
                                     <tr key={product.id} className="hover:bg-gray-50">
                                         <td className="px-6 py-4 font-medium text-gray-600">{product.sku}</td>
                                         <td className="px-6 py-4 font-semibold text-gray-800">{product.name}</td>
-                                        {/* <td className="px-6 py-4 font-semibold text-gray-800">{new Date(product.created_at).toLocaleDateString(('id-ID'), {
-                                            day: '2-digit',
-                                            month: '2-digit',
-                                            year: 'numeric'
-                                        })}</td> */}
                                         <td className="px-6 py-4">Rp {parseInt(product.price).toLocaleString()}</td>
                                         <td className="px-6 py-4">{product.stock}</td>
                                         <td className="px-6 py-4">
-                                            <span className={`px-2 py-1 rounded text-xs font-bold ${product.stock > 10 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                                                {product.stock > 10 ? 'Aman' : 'Low'}
+                                            <span className={`px-2 py-1 rounded text-xs font-bold ${product.stock > 9 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                                {product.stock > 9 ? 'Aman' : 'Rendah'}
                                             </span>
                                         </td>
                                     </tr>

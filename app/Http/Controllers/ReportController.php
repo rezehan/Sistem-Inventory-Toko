@@ -2,38 +2,67 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
+use App\Models\Product;
+use App\Models\TransactionDetail;
+// use App\Models\ActivityLog; // Jika nanti sudah buat modelnya
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Carbon\Carbon;
 
 class ReportController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        // 1. Tentukan Rentang Tanggal (Default: Bulan Ini)
-        $startDate = $request->input('start_date', Carbon::now()->startOfMonth()->format('Y-m-d'));
-        $endDate = $request->input('end_date', Carbon::now()->endOfMonth()->format('Y-m-d'));
+        // --- CONTOH DATA DUMMY AKTIVITAS SYSTEM ---
+        // Nanti Anda bisa menggantinya dengan: ActivityLog::latest()->get();
+        $dummyLogs = [
+            [
+                'id' => 1,
+                'user' => 'Admin Fatir',
+                'action' => 'Login System',
+                'description' => 'Berhasil masuk ke dalam sistem dashboard.',
+                'type' => 'auth', // auth, transaction, product, danger
+                'created_at' => now()->subMinutes(5)->toDateTimeString(),
+            ],
+            [
+                'id' => 2,
+                'user' => 'Kasir Raihan',
+                'action' => 'Transaksi Baru',
+                'description' => 'Membuat transaksi #INV-0092 senilai Rp 150.000',
+                'type' => 'transaction',
+                'created_at' => now()->subMinutes(20)->toDateTimeString(),
+            ],
+            [
+                'id' => 3,
+                'user' => 'Admin Fatir',
+                'action' => 'Update Stok',
+                'description' => 'Menambah stok "Mouse Logitech" (+50 unit).',
+                'type' => 'product',
+                'created_at' => now()->subHours(1)->toDateTimeString(),
+            ],
+            [
+                'id' => 4,
+                'user' => 'Staff Gudang',
+                'action' => 'Hapus Produk',
+                'description' => 'Menghapus produk "Kabel HDMI Rusak".',
+                'type' => 'danger',
+                'created_at' => now()->subHours(3)->toDateTimeString(),
+            ],
+             [
+                'id' => 5,
+                'user' => 'Kasir Raihan',
+                'action' => 'Cetak Struk',
+                'description' => 'Mencetak ulang struk untuk #INV-0088.',
+                'type' => 'info',
+                'created_at' => now()->subHours(5)->toDateTimeString(),
+            ],
+        ];
 
-        // 2. Ambil Data Transaksi sesuai filter
-        $transactions = Transaction::with('user') // Load data kasir
-            ->whereDate('created_at', '>=', $startDate)
-            ->whereDate('created_at', '<=', $endDate)
-            ->latest()
-            ->get();
-
-        // 3. Hitung Ringkasan
-        $totalRevenue = $transactions->sum('total_price');
-        $totalTransactions = $transactions->count();
-
-        return Inertia::render('Reports/Index', [
-            'transactions' => $transactions,
-            'totalRevenue' => $totalRevenue,
-            'totalTransactions' => $totalTransactions,
-            'filters' => [
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-            ]
+        return Inertia::render('Report', [
+            'salesData' => TransactionDetail::with(['transaction.user', 'product'])
+                ->latest()
+                ->get(),
+            'products' => Product::orderBy('stock', 'asc')->get(),
+            'systemLogs' => $dummyLogs, // <--- Data Aktivitas dikirim di sini
         ]);
     }
 }

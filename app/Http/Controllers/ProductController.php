@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        return Inertia::render('DashboardStaff', [
+        return Inertia::render('Products', [
             'products' => Product::latest()->get()
         ]);
     }

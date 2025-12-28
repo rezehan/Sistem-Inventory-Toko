@@ -39,7 +39,7 @@ export default function Nav({
                                 <div className="flex items-center gap-2 text-sm text-gray-500">
                                     <span className="text-cyan-600">Home</span>
                                     <span>/</span>
-                                    <span>Dashboard Siakad</span>
+                                    <span>Dashboard</span>
                                 </div>
                             </div>
                         </div>
