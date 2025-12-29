@@ -32,8 +32,8 @@ export default function AuthenticatedLayout({ header, children }) {
     const menuItems = [
         { id: 'dashboard', name: 'Dashboard', route: 'dashboard', icon: Home, roles: ['admin', 'staff'] },
         { id: 'produk', name: 'Kelola Produk', route: 'products.index', icon: Package, roles: ['staff', 'admin'] },
-        { id: 'transaksi', name: 'Transaksi', route: 'transactions.index', icon: ShoppingCart, roles: ['kasir', 'admin'] },
-        { id: 'laporan', name: 'Laporan', route: 'reports.index', icon: FileText, roles: ['admin', 'staff'] },
+        { id: 'transaksi', name: 'Transaksi', route: 'transactions.index', icon: ShoppingCart, roles: ['kasir', 'admin', 'staff'] },
+        { id: 'laporan', name: 'Laporan', route: 'reports.index', icon: FileText, roles: ['admin'] },
     ];
 
     const activeMenu = getActiveMenu();

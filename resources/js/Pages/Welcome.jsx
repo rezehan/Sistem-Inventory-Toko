@@ -81,13 +81,7 @@ export default function Welcome({ auth }) {
                                 {/* Logic Auth: Login/Register vs Dropdown Profile */}
                                 {auth.user ? (
                                     <div className="flex items-center gap-4">
-                                        {/* Link Dashboard tetap ada di samping Dropdown */}
-                                        <Link
-                                            href={route('dashboard')}
-                                            className="hidden sm:block text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition"
-                                        >
-                                            Dashboard
-                                        </Link>
+
 
                                         {/* FITUR DROPDOWN PROFIL SEPERTI DI GAMBAR */}
                                         <div className="relative">
@@ -110,6 +104,7 @@ export default function Welcome({ auth }) {
 
                                                 <Dropdown.Content>
                                                     <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                                    <Dropdown.Link href={route('dashboard')}>Dashboard</Dropdown.Link>
                                                     <Dropdown.Link href={route('logout')} method="post" as="button">
                                                         Log Out
                                                     </Dropdown.Link>
@@ -209,7 +204,7 @@ export default function Welcome({ auth }) {
                             </Link>
 
                             <Link
-                                href="/blog"
+                                href={route('blog')} //route
                                 className="px-8 py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 border-2 border-blue-600 dark:border-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-700 transition text-lg font-semibold"
                             >
                                 <motion.span

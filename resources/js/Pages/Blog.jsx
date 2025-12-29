@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Head, Link } from '@inertiajs/react';
+import Dropdown from '@/Components/Dropdown'; 
 import { 
     ArrowLeft, CheckCircle2, Database, 
     ShoppingCart, FileBarChart, Users, 
-    ShieldCheck, Zap, Layers, ArrowRight, Sun, Moon 
+    ShieldCheck, Zap, Layers, ArrowRight, Sun, Moon,
+    CircleUserRound 
 } from 'lucide-react';
 
-export default function BlogSite() {
-    // --- 1. LOGIKA DARK MODE ---
+export default function BlogSite({ auth }) {
+    
+    // --- LOGIKA DARK MODE ---
     const [isDark, setIsDark] = useState(() => {
         if (typeof window !== 'undefined') {
             return localStorage.getItem('theme') === 'dark' || 
@@ -35,10 +38,12 @@ export default function BlogSite() {
                 
                 {/* --- NAVBAR --- */}
                 <nav className="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-gray-200 dark:border-slate-800">
-                    <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+                    <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+                        
+                        {/* Tombol Kembali (Bisa diakses siapa saja) */}
                         <Link href="/" className="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-blue-600 transition font-medium">
                             <ArrowLeft size={20} />
-                            <span>Kembali</span>
+                            <span className="hidden sm:inline">Kembali</span>
                         </Link>
                         
                         <div className="flex items-center gap-4">
@@ -53,9 +58,52 @@ export default function BlogSite() {
 
                             <div className="h-6 w-px bg-gray-200 dark:bg-slate-700 mx-1"></div>
 
-                            <div className="font-bold text-lg tracking-tight">
-                                Stock<span className="text-blue-600">Pulse</span> Docs
-                            </div>
+                            {/* --- LOGIKA AUTH NAVBAR --- */}
+                            {/* PENTING: auth.user dicek di sini. Jika null (tamu), tampilkan tombol Login */}
+                            {auth.user ? (
+                                <div className="relative">
+                                    <Dropdown>
+                                        <Dropdown.Trigger>
+                                            <span className="inline-flex rounded-md">
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex items-center gap-2 px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-slate-600 dark:text-slate-300 bg-transparent hover:text-slate-900 dark:hover:text-white focus:outline-none transition ease-in-out duration-150"
+                                                >
+                                                    <CircleUserRound size={20} />
+                                                    <span className="hidden sm:inline">{auth.user.name}</span>
+                                                    <svg className="ml-1 -mr-0.5 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </span>
+                                        </Dropdown.Trigger>
+
+                                        <Dropdown.Content>
+                                            <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                            <Dropdown.Link href={route('dashboard')}>Dashboard</Dropdown.Link>
+                                            <Dropdown.Link href={route('logout')} method="post" as="button">
+                                                Log Out
+                                            </Dropdown.Link>
+                                        </Dropdown.Content>
+                                    </Dropdown>
+                                </div>
+                            ) : (
+                                /* TAMPILAN UNTUK NON-USER (TAMU) */
+                                <div className="flex items-center gap-3">
+                                    <Link 
+                                        href={route('login')}
+                                        className="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 transition"
+                                    >
+                                        Log in
+                                    </Link>
+                                    <Link 
+                                        href={route('register')}
+                                        className="px-4 py-2 text-sm font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition shadow-sm"
+                                    >
+                                        Register
+                                    </Link>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </nav>
@@ -131,65 +179,7 @@ export default function BlogSite() {
                     </div>
                 </section>
 
-                {/* --- ROLE SECTION --- */}
-                <section className="py-20 px-6 max-w-5xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl font-bold mb-4 dark:text-white text-slate-900">Siapa yang Menggunakan?</h2>
-                        <p className="text-slate-500 dark:text-slate-400">Sistem ini membagi hak akses agar data tetap aman.</p>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-6">
-                        <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm hover:border-red-500 transition-colors">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="bg-red-100 dark:bg-red-900/30 p-3 rounded-lg text-red-600">
-                                    <ShieldCheck size={24} />
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-lg dark:text-white">Admin</h4>
-                                    <p className="text-xs text-slate-500 uppercase font-bold">Akses Penuh</p>
-                                </div>
-                            </div>
-                            <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
-                                <li className="flex gap-2"><CheckCircle2 size={16} className="text-red-500" /> Mengelola User</li>
-                                <li className="flex gap-2"><CheckCircle2 size={16} className="text-red-500" /> Laporan Keuangan</li>
-                            </ul>
-                        </div>
-
-                        <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm hover:border-blue-500 transition-colors">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg text-blue-600">
-                                    <Layers size={24} />
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-lg dark:text-white">Staff</h4>
-                                    <p className="text-xs text-slate-500 uppercase font-bold">Gudang</p>
-                                </div>
-                            </div>
-                            <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
-                                <li className="flex gap-2"><CheckCircle2 size={16} className="text-blue-500" /> Kelola Stok</li>
-                                <li className="flex gap-2"><CheckCircle2 size={16} className="text-blue-500" /> Update Produk</li>
-                            </ul>
-                        </div>
-
-                        <div className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm hover:border-green-500 transition-colors">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="bg-green-100 dark:bg-green-900/30 p-3 rounded-lg text-green-600">
-                                    <ShoppingCart size={24} />
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-lg dark:text-white">Kasir</h4>
-                                    <p className="text-xs text-slate-500 uppercase font-bold">Point of Sale</p>
-                                </div>
-                            </div>
-                            <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
-                                <li className="flex gap-2"><CheckCircle2 size={16} className="text-green-500" /> Transaksi Cepat</li>
-                                <li className="flex gap-2"><CheckCircle2 size={16} className="text-green-500" /> Print Struk</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                {/* --- CALL TO ACTION --- */}
+                {/* --- CALL TO ACTION (CTA) --- */}
                 <section className="py-24 px-6">
                     <div className="max-w-5xl mx-auto bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[2.5rem] p-10 md:p-16 text-center shadow-2xl shadow-blue-200 dark:shadow-none relative overflow-hidden">
                         <div className="relative z-10">
@@ -197,24 +187,35 @@ export default function BlogSite() {
                                 Tertarik Menggunakan?
                             </h2>
                             <p className="text-blue-100 text-lg md:text-xl font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
-                                Jangan biarkan stok berantakan menghambat bisnis Anda. 
                                 Bergabunglah sekarang dan rasakan kemudahan manajemen inventory yang sesungguhnya.
                             </p>
                             
-                            <div className="flex flex-col sm:flex-row justify-center gap-4">
-                                <Link 
-                                    href={route('register')} 
-                                    className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 rounded-2xl font-bold text-lg hover:bg-blue-50 hover:scale-105 transition shadow-lg"
-                                >
-                                    Register Sekarang <ArrowRight className="ml-2 w-5 h-5" />
-                                </Link>
-                                <Link 
-                                    href={route('login')} 
-                                    className="inline-flex items-center justify-center px-8 py-4 bg-blue-700/50 text-white border border-blue-400/30 rounded-2xl font-bold text-lg hover:bg-blue-700 transition"
-                                >
-                                    Login Akun
-                                </Link>
-                            </div>
+                            {/* LOGIKA TOMBOL CTA: Juga dipisah antara user dan non-user */}
+                            {auth.user ? (
+                                <div className="flex justify-center">
+                                    <Link 
+                                        href={route('dashboard')} 
+                                        className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 rounded-2xl font-bold text-lg hover:bg-blue-50 hover:scale-105 transition shadow-lg"
+                                    >
+                                        Ke Dashboard <ArrowRight className="ml-2 w-5 h-5" />
+                                    </Link>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                    <Link 
+                                        href={route('register')} 
+                                        className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 rounded-2xl font-bold text-lg hover:bg-blue-50 hover:scale-105 transition shadow-lg"
+                                    >
+                                        Register Sekarang <ArrowRight className="ml-2 w-5 h-5" />
+                                    </Link>
+                                    <Link 
+                                        href={route('login')} 
+                                        className="inline-flex items-center justify-center px-8 py-4 bg-blue-700/50 text-white border border-blue-400/30 rounded-2xl font-bold text-lg hover:bg-blue-700 transition"
+                                    >
+                                        Login Akun
+                                    </Link>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </section>
@@ -225,4 +226,4 @@ export default function BlogSite() {
             </div>
         </>
     );
-} 
+}

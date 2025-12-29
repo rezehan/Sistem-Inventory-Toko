@@ -14,11 +14,11 @@ use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
-| Public Routes (Tamu / Belum Login)
+| Public Routes (Bisa Diakses Semua Orang: Tamu & User)
 |--------------------------------------------------------------------------
 */
 
-// Sesuai permintaan, ditambahkan ->name('welcome') agar bisa diakses Sidebar
+// Halaman Depan (Welcome)
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -28,9 +28,11 @@ Route::get('/', function () {
     ]);
 })->name('welcome'); 
 
-Route::get('/halaman-blog', function () {
+// Halaman Blog (DIPINDAHKAN KE SINI AGAR BISA DIAKSES NON-USER)
+Route::get('/blog', function () {
     return Inertia::render('Blog');
-})->name('blogSite');
+})->name('blog');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +79,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('transactions', TransactionController::class)->only(['index', 'store']);
     });
 
+    // (Route Blog yang ada di sini sebelumnya SUDAH SAYA HAPUS karena duplikat dan salah tempat)
 });
 
 require __DIR__ . '/auth.php';
